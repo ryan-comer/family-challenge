@@ -2,7 +2,6 @@ import { Typography, Box, Grid } from "@mui/material";
 import ChallengeCard from "./ChallengeCard";
 
 export default function ChallengeList(props) {
-
     return (
         <Box>
             <Grid container>

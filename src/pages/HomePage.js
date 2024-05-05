@@ -3,40 +3,34 @@ import { Box, Typography } from '@mui/material';
 import ChallengeCard from '../components/ChallengeCard';
 import ChallengeList from '../components/ChallengeList';
 
-const challenges = [
-    {
-        id: 1,
-        title: "Challenge 1",
-        description: "This is the first challenge",
-        date: new Date(),
-    },
-    {
-        id: 2,
-        title: "Challenge 2",
-        description: "This is the second challenge",
-        date: new Date(),
-    },
-    {
-        id: 3,
-        title: "Challenge 3",
-        description: "This is the third challenge",
-        date: new Date(),
-    },
-];
+import { getChallenges } from '../services/ChallengeService';
+import { useEffect, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
 
 export default function HomePage() {
+    const [challenges, setChallenges] = useState([]);
+    const theme = useTheme();
+
+    useEffect(() => {
+        getChallenges().then((challenges) => {
+            setChallenges(challenges);
+        }).catch((error) => {
+            console.error(error);
+        });
+    }, []);
+
     return (
         <Box sx={{
             padding: 2
         }}>
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h4" gutterBottom>
                 Current Challenge
             </Typography>
             <ChallengeCard expanded={true} interactive={false} {...challenges[0]} />
             <Box sx={{
                 marginY: 3,
-                border: '1px solid gray',
-                borderRadius: 2,
+                border: `5px solid ${theme.palette.primary.main}`,
+                borderRadius: 1,
             }}/>
             <Typography variant="h4" gutterBottom>
                 Previous Challenges

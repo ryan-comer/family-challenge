@@ -20,7 +20,7 @@ function App() {
       <MainBar />
       <BrowserRouter>
         {routes.map((route) => {
-          return <route.component />;
+          return <route.component key={route.path}/>;
         })}
       </BrowserRouter>
     </div>
