@@ -39,7 +39,7 @@ export default function ChallengeCard(props) {
                             </Typography>
                             <ImageList variant="masonry" cols={3} gap={8} rowHeight={180}>
                                 {props.images?.map((image) => (
-                                    <ImageListItem key={image.img}>
+                                    <ImageListItem key={image.id}>
                                     <img
                                         srcSet={`${image.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
                                         src={`${image.url}?w=248&fit=crop&auto=format`}
