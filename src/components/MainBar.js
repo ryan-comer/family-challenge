@@ -14,21 +14,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '../features/user/userslice';
 
 import { googleLogout } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 
 export default function MainBar(props) {
   const [showLogin, setShowLogin] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
+  const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  function handleMenu(event) {
-    setAnchorEl(event.currentTarget);
-  }
+  const [anchorProfile, setAnchorProfile] = useState(null);
+  const [anchorRoutes, setAnchorRoutes] = useState(null);
 
   function logout() {
     googleLogout()
     dispatch(setUser(null));
+  }
+
+  function changeRoute(path) {
+    navigate(path);
+    return true
   }
 
   return (
@@ -44,7 +48,7 @@ export default function MainBar(props) {
           <LoginCard onClose={() => setShowLogin(false)}/>
         </Box>
       }
-      <AppBar position="sticky">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             size="large"
@@ -52,9 +56,22 @@ export default function MainBar(props) {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick={(event) => setAnchorRoutes(event.currentTarget)}
           >
             <MenuIcon />
           </IconButton>
+          <Menu
+            id="pages"
+            anchorEl={anchorRoutes}
+            open={Boolean(anchorRoutes)}
+            onClose={() => setAnchorRoutes(null)}
+          >
+            {props.routes.map((route) => {
+              return (
+                <MenuItem key={route.path} onClick={() => changeRoute(route.path) && setAnchorRoutes(null)}>{route.name}</MenuItem>
+              );
+            })}
+          </Menu>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Family Challenge
           </Typography>
@@ -62,14 +79,14 @@ export default function MainBar(props) {
             <Box sx={{
               cursor: 'pointer',
             }}>
-              <Avatar alt={user.name} src={user.picture} onClick={handleMenu}/>
+              <Avatar alt={user.name} src={user.picture} onClick={(event) => setAnchorProfile(event.currentTarget)}/>
               <Menu
                 id="simple-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
+                anchorEl={anchorProfile}
+                open={Boolean(anchorProfile)}
+                onClose={() => setAnchorProfile(null)}
               >
-                <MenuItem onClick={() => logout() && setAnchorEl(null)}>Logout</MenuItem>
+                <MenuItem onClick={() => logout() && setAnchorProfile(null)}>Logout</MenuItem>
               </Menu>
             </Box>
           }
